@@ -269,7 +269,7 @@ func Scrape(toScrape string) {
 	models.RemoveLock("scrape")
 }
 
-func ScrapeJAVR(queryString string) {
+func ScrapeJAVR(queryString string, site string) {
 	if !models.CheckLock("scrape") {
 		models.CreateLock("scrape")
 		t0 := time.Now()
@@ -290,8 +290,13 @@ func ScrapeJAVR(queryString string) {
 		// Start scraping
 		var collectedScenes []models.ScrapedScene
 
-		tlog.Infof("Scraping JavDB")
-		scrape.ScrapeJavDB(knownScenes, &collectedScenes, queryString)
+		if site == "javdatabase.com" {
+			tlog.Infof("Scraping javdatabase.com")
+			scrape.ScrapeJavDB(knownScenes, &collectedScenes, queryString)
+		} else {
+			tlog.Infof("Scraping javlibrary.com")
+			scrape.ScrapeJavLibrary(knownScenes, &collectedScenes, queryString)
+		}
 
 		if len(collectedScenes) > 0 {
 			db, _ := models.GetDB()

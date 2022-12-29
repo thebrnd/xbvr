@@ -14,6 +14,10 @@ type RequestScrapeJAVR struct {
 	Query string `json:"q"`
 }
 
+type RequestScrapeJAVRDB struct {
+	Query string `json:"q"`
+}
+
 type RequestScrapeTPDB struct {
 	ApiToken string `json:"apiToken"`
 	SceneUrl string `json:"sceneUrl"`
@@ -69,6 +73,9 @@ func (i TaskResource) WebService() *restful.WebService {
 		Metadata(restfulspec.KeyOpenAPITags, tags))
 
 	ws.Route(ws.POST("/scrape-javr").To(i.scrapeJAVR).
+		Metadata(restfulspec.KeyOpenAPITags, tags))
+
+	ws.Route(ws.POST("/scrape-javrdb").To(i.scrapeJAVRDB).
 		Metadata(restfulspec.KeyOpenAPITags, tags))
 
 	ws.Route(ws.POST("/scrape-tpdb").To(i.scrapeTPDB).
@@ -165,7 +172,20 @@ func (i TaskResource) scrapeJAVR(req *restful.Request, resp *restful.Response) {
 	}
 
 	if r.Query != "" {
-		go tasks.ScrapeJAVR(r.Query)
+		go tasks.ScrapeJAVR(r.Query, "javlibrary.com")
+	}
+}
+
+func (i TaskResource) scrapeJAVRDB(req *restful.Request, resp *restful.Response) {
+	var r RequestScrapeJAVRDB
+	err := req.ReadEntity(&r)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	if r.Query != "" {
+		go tasks.ScrapeJAVR(r.Query, "javdatabase.com")
 	}
 }
 

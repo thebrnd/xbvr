@@ -1,11 +1,21 @@
 <template>
   <div class="content">
-    <h3 class="title">{{$t('Import JAVR scene from javdatabase.com')}}</h3>
+    <h3 class="title">{{$t('Import JAVR scene from javlibrary.com')}}</h3>
     <div class="card">
       <div class="card-content content">
         <b-field grouped>
           <b-input v-model="javrQuery" placeholder="ID (xxxx-001)" type="search"></b-input>
           <b-button class="button is-primary" v-on:click="scrapeJAVR()">{{$t('Go')}}</b-button>
+        </b-field>
+      </div>
+    </div>
+
+    <h3 class="title">{{$t('Import JAVR scene from javdatabase.com')}}</h3>
+    <div class="card">
+      <div class="card-content content">
+        <b-field grouped>
+          <b-input v-model="javrdbQuery" placeholder="ID (xxxx-001)" type="search"></b-input>
+          <b-button class="button is-primary" v-on:click="scrapeJAVRDB()">{{$t('Go')}}</b-button>
         </b-field>
       </div>
     </div>
@@ -62,6 +72,9 @@ export default {
     },
     scrapeJAVR () {
       ky.post('/api/task/scrape-javr', { json: { q: this.javrQuery } })
+    },
+    scrapeJAVRDB () {
+      ky.post('/api/task/scrape-javrdb', { json: { q: this.javrdbQuery } })
     },
     scrapeTPDB () {
       ky.post('/api/task/scrape-tpdb', {
