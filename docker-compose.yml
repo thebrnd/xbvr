@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+  xbvr:
+    build:
+      dockerfile: Dockerfile-standalone
+      context: .
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./xbvr-config-test:/root/.config/
+      - ./test-data:/mnt:ro
+
+# vim: sw=2:ts=2:expandtab
